@@ -20,8 +20,9 @@ public class HomeController {
                                          @RequestParam("input2") String input2,
                                          Model model) { //model is used to set data on html page;
         
-        System.out.println("Received: " + input1 + " " + input2);
-        model.addAttribute("message", "Data Submitted Successfully"); //set data on 'message' attribute in result.html bcz it return result.html;
+        String msg = "Received--> " + input1 + " " + input2;
+        System.out.println(msg);
+        model.addAttribute("message", msg+"'s Data Submitted Successfully"); //set data on 'message' attribute in result.html bcz it return result.html;
         return "result"; // A view to show the result or confirmation message
     }
 }
