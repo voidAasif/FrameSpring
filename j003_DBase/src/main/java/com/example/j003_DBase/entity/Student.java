@@ -12,7 +12,7 @@ public class Student {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int studentId;
+    public Integer studentId;
 
     private String studentName;
     private boolean studentAttend;
@@ -28,7 +28,7 @@ public class Student {
     }
 
     // Setters
-    public void setStudentId(int studentId) {
+    public void setStudentId(Integer studentId) {
         this.studentId = studentId;
     }
 
@@ -41,7 +41,7 @@ public class Student {
     }
 
     // Getters
-    public int getStudentId() {
+    public Integer getStudentId() {
         return studentId;
     }
 

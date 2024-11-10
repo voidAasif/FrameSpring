@@ -36,16 +36,16 @@ public class DBaseController {
 
     @PostMapping
     public void postRequest(@RequestBody Student myStudent){
-
+        studentServices.addData(myStudent);
     }
 
     @PutMapping("/{stuId}")
     public void putRequest(@PathVariable int stuId, @RequestBody Student myStudent){
-        
+        studentServices.updateData(stuId, myStudent);
     }
 
     @DeleteMapping("/{stuId}")
-    public void deleteRequest(@PathVariable int stuId, @RequestBody Student myStudent){
-
+    public void deleteRequest(@PathVariable int stuId){
+        studentServices.deleteData(stuId);
     }
 }
