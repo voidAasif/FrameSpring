@@ -12,32 +12,40 @@ import com.example.j004_DbM.repo.StudentRepo;
 @Service
 public class StudentService {
 
+    @Autowired
     public StudentRepo studentRepo;
 
-    @Autowired
-    public StudentService(StudentRepo studentRepo){
-        this.studentRepo = studentRepo;
-    }
+    // public StudentService(StudentRepo studentRepo){
+    //     this.studentRepo = studentRepo;
+    // }
     
     public List<Student> getStudents(){
         return studentRepo.findAll();
     }
 
-    public void addStudent(Student myStudent){
-        studentRepo.save(myStudent);
+    public Student getStudentByName(String studentName){
+        return studentRepo.giveStudentByName(studentName);
     }
 
-    public void updateStudent(int studentId, Student myStudent){
+    public Student addStudent(Student myStudent){
+        return studentRepo.save(myStudent);
+    }
+
+    public Student updateStudent(int studentId, Student myStudent){
         Student existStudent = studentRepo.findById(studentId).orElseThrow(()-> new RuntimeException("Student not found"));
         
         existStudent.setStudentName(myStudent.getStudentName());
         existStudent.setDob(myStudent.getDob());
 
-        studentRepo.save(existStudent);
+        return studentRepo.save(existStudent);
     }
 
-    public void deleteStudent(int studentId){
+    public boolean deleteStudent(int studentId){
         Optional<Student> student = studentRepo.findById(studentId);
-        if(student.isPresent()) studentRepo.deleteById(studentId);
+        if(student.isPresent()){
+            studentRepo.deleteById(studentId);
+            return true;
+        } 
+        return false;
     }
 }
