@@ -3,6 +3,7 @@ package com.example.j005_ERMapping.students.entity;
 // import java.util.Objects;
 
 import com.example.j005_ERMapping.subjects.entity.Subject;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -18,6 +19,7 @@ public class Student {
     private char grade;
 
     @OneToOne(cascade = CascadeType.ALL)
+    @JsonManagedReference //now student class is used to manage other classes which are mapped with it; //for JSON parent;
     private Subject subject;  // mapping with another table or class, one-to-one mapping;
 
     public Student(){}

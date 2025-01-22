@@ -1,9 +1,13 @@
 package com.example.j005_ERMapping.subjects.entity;
 
+import com.example.j005_ERMapping.students.entity.Student;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 
 // import java.util.Objects;
 
@@ -15,6 +19,10 @@ public class Subject {
     private int subjectCode;
     private String subjectName;
     private boolean subjectComplete;
+
+    @OneToOne(mappedBy = "subject") //now it not make new column of studentId into subject table for Foreign key | "subject" -> student class;
+    @JsonBackReference //now it break the loop between student and subject; //for JSON child;
+    private Student student;
 
     public Subject(){}
 
