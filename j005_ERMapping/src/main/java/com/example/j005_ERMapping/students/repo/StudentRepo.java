@@ -6,6 +6,4 @@ import org.springframework.stereotype.Repository;
 import com.example.j005_ERMapping.students.entity.Student;
 
 @Repository
-public interface Repo extends JpaRepository<Student, Integer> {
-    
-}
+public interface StudentRepo extends JpaRepository<Student, Integer> {}

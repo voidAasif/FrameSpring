@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class J005ErMappingApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(J005ErMappingApplication.class, args);
+		SpringApplication.run(J005ErMappingApplication.class, args); //starts application;
 
 		System.out.println("Done");
 	}

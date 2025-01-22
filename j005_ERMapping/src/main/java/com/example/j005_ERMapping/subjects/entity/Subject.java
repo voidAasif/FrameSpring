@@ -1,8 +1,17 @@
 package com.example.j005_ERMapping.subjects.entity;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
 // import java.util.Objects;
 
+@Entity
 public class Subject {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int subjectCode;
     private String subjectName;
     private boolean subjectComplete;
@@ -15,27 +24,27 @@ public class Subject {
         this.subjectComplete = subjectComplete;
     }
 
-    public void setSubCode(int subjectCode){
+    public void setSubjectCode(int subjectCode){
         this.subjectCode = subjectCode;
     }
 
-    public void setSubName(String subjectName){
+    public void setSubjectName(String subjectName){
         this.subjectName = subjectName;
     }
 
-    public void setSubComplete(boolean subjectComplete){
+    public void setSubjectComplete(boolean subjectComplete){
         this.subjectComplete = subjectComplete;
     }
 
-    public int getSubCode(){
+    public int getSubjectCode(){
         return subjectCode;
     }
 
-    public String getSubName(){
+    public String getSubjectName(){
         return subjectName;
     }
 
-    public boolean getSubComplete(){
+    public boolean getSubjectComplete(){
         return subjectComplete;
     }
 
@@ -47,7 +56,7 @@ public class Subject {
     @Override
     public boolean equals(Object obj){
         Subject that = (Subject) obj;
-        if(this.getSubCode() == that.getSubCode()) return true; //diff subject on the basic of its subject code;
+        if(this.getSubjectCode() == that.getSubjectCode()) return true; //diff subject on the basic of its subject code;
         return this == that;
     }
 

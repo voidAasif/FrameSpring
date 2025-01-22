@@ -4,10 +4,20 @@ package com.example.j005_ERMapping.students.entity;
 
 import com.example.j005_ERMapping.subjects.entity.Subject;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
+
+@Entity
 public class Student {
+
+    @Id
     private int rollNo;
     private String name;
     private char grade;
+
+    @OneToOne(cascade = CascadeType.ALL)
     private Subject subject;  // mapping with another table or class, one-to-one mapping;
 
     public Student(){}
