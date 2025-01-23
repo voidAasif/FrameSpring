@@ -20,14 +20,14 @@ public class FileController {
     @Autowired
     public FileService fileService;
 
-    @GetMapping("/upload")
-    public String getData(){
+    @GetMapping("/upload") 
+    public String getData(){ //for server testing;
         return "working";
     }
     
-    @PostMapping("/upload")
-    public ResponseEntity<String> postData(@RequestParam("myFileKey") MultipartFile file){
-        if (!fileService.uploadData(file)) {
+    @PostMapping("/upload") //upload file on server;
+    public ResponseEntity<String> postData(@RequestParam("myFileKey") MultipartFile file){ //myFileKey is form key;
+        if (!fileService.uploadData(file)) { //send file on service;
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occur while uploading file");
         }
 
@@ -35,8 +35,8 @@ public class FileController {
     }
 
     @DeleteMapping("/upload")
-    public String deleteData(){
-        if (fileService.deleteAll()) {   
+    public String deleteData(){ //empty directory;
+        if (fileService.deleteAll()) {   //call service;
             return "All file deleted";
         }
         return "File not delete";
