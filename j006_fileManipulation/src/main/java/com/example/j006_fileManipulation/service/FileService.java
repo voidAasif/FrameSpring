@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,7 +16,13 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class FileService {
 
-    public String uploadPath = "src/main/resources/static/image/"; //path where images are stored;
+    //static path;
+    // public String uploadPath = "src/main/resources/static/image/"; //path where images are stored;
+
+    //dynamic path;
+    public String uploadPath = new ClassPathResource("/static/image/").getFile().getAbsolutePath(); //now it return string value after chaining getFile and getAbsolutePath methods;
+
+    public FileService() throws IOException{} //classPathResources's method getFile throws IOException so we need to handle it on constructor or surround it with try_catch;
 
     public boolean uploadData(MultipartFile multiPartFile){ //accept file;
         if (!multiPartFile.isEmpty()) {
@@ -52,9 +59,9 @@ public class FileService {
             //work same as above io method;
 
             //copy method take three values: (InputStream, Target Path, CopyOption)
-            Files.copy(multiPartFile.getInputStream(), //Input Stream to store on given target path;
-            Path.of( uploadPath+multiPartFile.getOriginalFilename() ), //path with file name, not accept direct string, so we use path class;
-            StandardCopyOption.REPLACE_EXISTING); //CopyOption 
+            Files.copy(multiPartFile.getInputStream(), //value1: Input Stream to store on given target path;
+            Path.of( uploadPath+multiPartFile.getOriginalFilename() ), //value2: path with file name, not accept direct string, so we use path class;
+            StandardCopyOption.REPLACE_EXISTING); //value3: CopyOption 
 
 
         } catch (IOException e) {

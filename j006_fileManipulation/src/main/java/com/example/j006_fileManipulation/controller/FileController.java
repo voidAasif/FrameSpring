@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.example.j006_fileManipulation.service.FileService;
 
@@ -31,7 +32,14 @@ public class FileController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occur while uploading file");
         }
 
-        return ResponseEntity.ok("file upload successfully");
+        String fileUrl = ServletUriComponentsBuilder.fromCurrentContextPath().path("/image/").path(file.getOriginalFilename()+"").toUriString();
+        //ServletUriComponentsBuilder.fromCurrentContextPath -> give current path like "http://localhost:8080" or live path;
+        //.path("/image/") -> add "/image/" after localhost;
+        //.path(file.getOriginalFilename()) -> it add fileName at the end of url;
+        //toUriString() -> it convert UriComponentBuilder into String;
+        //final string -> http://localhost:8080/image/xyz.jpg;
+
+        return ResponseEntity.ok("file upload successfully || URL: " + fileUrl);
     }
 
     @DeleteMapping("/upload")
