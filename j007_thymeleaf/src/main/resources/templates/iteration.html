@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iteration</title>
+</head>
+<body>
+    <h1 th:text="${fruits}"></h1>
+    
+    <!-- use of all methods  -->
+    <ul>
+        <li th:each=" ele, sts : ${fruits}">
+            <span th:text="'index: '+${sts.index}+' - ele: '+${ele} + ' -> count: ' +${sts.count}+ ' -> size: '+${sts.size}+' -> even: '+${sts.even}+' -> odd: '+${sts.odd}+' -> first: '+${sts.first}+' -> last: '+${sts.last}"></span>
+        </li>
+    </ul>
+
+    <hr>
+    <!-- 
+    1. index: the current iteration index, starting with 0 (zero);
+    2. count: the number of elements processed so far, starting with (one);
+    3. size: the total number of elements in the list;
+    4. even/odd: checks if the current iteration index is even or odd;
+    5. first: checks if the current iteration is the first one;
+    6. last: checks if the current iteration is the last one;
+    -->
+    <hr>
+
+    <h2>use of status methods is th:each</h2>
+
+    <!-- some use-case of above methods  -->
+    <li th:each="ele, status : ${fruits}">
+        <span th:style="${status.even} ? 'color: red; background-color: aqua' : 'color: green; background-color: lightgray'" th:text="${ele}"></span>
+    </li>
+
+</body>
+</html>

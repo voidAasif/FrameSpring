@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Variable</title>
+</head>
+<body>
+    <!-- dynamic content -->
+    <h1>My name is: <span th:text="${name}"></span></h1>
+    <h1>Today Date is: <span th:text="${date}"></span></h1>
+    
+    <!-- use thymeleaf methods -->
+    <h1>My name in upperCase: <span th:text="${ #strings.toUpperCase(name) }"></span></h1>
+    <h1>The length of my name is: <span th:text="${ #strings.length(name)}"></span></h1>
+
+    <!-- dynamic and static local variables -->
+    <div th:with="a=7, b=12, n=${name}">
+
+        <!--1. print value between content -->
+        <h2>The value of a is <span th:text="${a}"></span></h2>
+
+        <!--2. print value between content  -->
+        <h2 th:text="'The value of b is: '+${b}"></h2>
+
+        <!-- operation between content  -->
+        <h2 th:text="'The sum of '+${a}+' and '+${b}+' is: '+${a+b}"></h2>
+
+        <!-- scope of content  -->
+         <h3>I am in div block, n: <span th:text="${n}"></span></h3>
+    </div>
+
+        <!-- scope of content  -->
+         <h3>I an out of div block, n: <span th:text="${n}"></span></h3>
+</body>
+</html>
