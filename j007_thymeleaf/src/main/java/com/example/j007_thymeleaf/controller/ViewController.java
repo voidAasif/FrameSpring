@@ -31,4 +31,27 @@ public class ViewController {
 
         return "iteration";
     }
+
+    @GetMapping("/condition")
+    public String condition(Model model){
+        System.out.println("condition working");
+
+        //elvis operator;
+        model.addAttribute("isActive", true);
+
+        //if-unless statement;
+        model.addAttribute("gender", 'M');
+
+        //switch-case statements;
+        model.addAttribute("monthNumber", 12);
+
+        return "condition";
+    }
+
+    @GetMapping("/fragment")
+    public String fragment(Model model){
+        System.out.println("fragment working");
+        
+        return "fragment";
+    }
 }

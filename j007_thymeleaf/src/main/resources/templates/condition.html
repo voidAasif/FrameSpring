@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conditions</title>
+</head>
+<body>
+    <!-- elvis operator  -->
+    <h1>User is <span th:style="${isActive}? 'color:green' : 'color:red'" th:text="${isActive} ? 'ONLINE' : 'OFFLINE' "></span></h1>
+
+    <!-- if-unless statements -->
+     <h1 th:if="${gender}=='M'">Male</h1>
+     <h1 th:unless="${gender}=='M'">Female</h1>
+
+     <!-- switch-case statements -->
+      <div th:switch="${monthNumber}">
+        <h1 th:case="1">Jan</h1>
+        <h1 th:case="2">Feb</h1>
+        <h1 th:case="3">Mar</h1>
+        <h1 th:case="4">Apr</h1>
+        <h1 th:case="5">May</h1>
+        <h1 th:case="6">Jun</h1>
+        <h1 th:case="7">Jul</h1>
+        <h1 th:case="8">Aug</h1>
+        <h1 th:case="9">Sep</h1>
+        <h1 th:case="10">Oct</h1>
+        <h1 th:case="11">Nov</h1>
+        <h1 th:case="12">Dec</h1>
+        <h1 th:case="*">Invalid Input</h1>
+      </div>
+</body>
+</html>

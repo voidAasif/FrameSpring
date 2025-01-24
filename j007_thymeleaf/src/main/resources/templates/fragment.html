@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>fragment</title>
+</head>
+<body>
+    <h1>Hii i am main page called fragment</h1>
+
+    <!-- insert, include and replace the "footerForFragment.html" into this fragment.html file -->
+    <!-- replace -> replace all the content of fragment with template; -->
+     <!-- insert -> add entire template in fragment (body tags +  content); -->
+      <!-- include -> add only content in fragment (only content not body tags); -->
+
+    <!-- footerForFragment -> file in which our fragment store -->
+     <!-- myFooter -> name of our fragment in our file written in th:fragment tag -->
+    <footer id="footerHost" th:replace="~{footerForFragment::myFooter}">
+
+    </footer>
+</body>
+</html>
