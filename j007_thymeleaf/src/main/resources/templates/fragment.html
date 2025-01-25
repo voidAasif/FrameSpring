@@ -18,5 +18,10 @@
     <footer id="footerHost" th:replace="~{footerForFragment::myFooter}">
 
     </footer>
+
+    <!-- this is template use footer with dynamic values, we also set this values by java's addAttribute of Model -->
+    <footer id="dynamicFooterHost" th:replace="~{dynamicFooterForFragment::myDynamicFooter('user: aasif', 'contact: +91 1234')}">
+
+    </footer>
 </body>
 </html>

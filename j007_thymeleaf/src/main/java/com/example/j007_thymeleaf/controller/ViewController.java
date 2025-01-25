@@ -48,10 +48,23 @@ public class ViewController {
         return "condition";
     }
 
-    @GetMapping("/fragment")
+    @GetMapping("/fragment") //this controller is used by both (footerForFragment and dynamicFooterForFragment) in one fragment.html endpoint;
     public String fragment(Model model){
         System.out.println("fragment working");
         
         return "fragment";
+    }
+
+    //inheritance hit different pages which inherit base.html content and their dynamic content on the basis of page;
+    @GetMapping("/inheritance/contact")
+    public String contact(){
+        System.out.println("inheritance contact working");
+        return "inheritance/contactChild1";
+    }
+
+    @GetMapping("/inheritance/about")
+    public String about(){
+        System.out.println("inheritance about working");
+        return "inheritance/aboutChild2";
     }
 }

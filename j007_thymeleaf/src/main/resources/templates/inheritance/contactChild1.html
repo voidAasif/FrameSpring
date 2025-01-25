@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<!-- copy the base and past it into contact with this dynamic section -->
+
+<!-- 1. select parent class (base:) -->
+<!-- 2. call method to send content (:layout(content)) -->
+<!-- 3. set dynamic content value (content => ::section) in this situation -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{inheritance/base::layout(~{::section})}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <title>contactChild1 of base</title> -->
+</head>
+<body>
+    <section>
+        <h2>Contact: </h2>
+        <h2>Mail</h2>
+        <h2>Phone Number</h2>
+    </section>
+</body>
+</html>

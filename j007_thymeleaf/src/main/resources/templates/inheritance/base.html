@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<!-- 1. content init in content layout(variable) -->
+<!-- 2. dynamic content set in base class (now entire page is ready) -->
+<!-- 3. now this entire page go into child class which is displayed on browser using controller -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:fragment="layout(content)">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>I am Base template</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body>
+    <header>I am static header</header>
+
+    <!-- dynamic content display here -->
+    <div th:replace="${content}"></div>
+
+    <footer>I am static footer</footer>
+    
+</body>
+</html>
