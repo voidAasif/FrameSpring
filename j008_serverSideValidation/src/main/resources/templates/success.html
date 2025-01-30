@@ -5,9 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>success</title>
 </head>
+<!-- Thymeleaf uses the th:object="${userData}" attribute in the form to bind the form's input fields to properties of the UserData object. -->
 <body th:object="${userData}">
     <h1>success</h1>
 
+    <!-- print different attributes of object, here this is not empty bcz we only visit this page after form page -->
     <h3 th:text="${userData.userName}"></h3>
     <h3 th:text="${userData.userEmail}"></h3>
     <h3 th:text="${userData.terms}"></h3>

@@ -9,7 +9,7 @@ public class J008ServerSideValidationApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(J008ServerSideValidationApplication.class, args);
 
-		System.out.println("Done");
+		System.out.println("Done"); //log;
 	}
 
 }

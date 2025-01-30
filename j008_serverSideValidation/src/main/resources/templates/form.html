@@ -12,11 +12,17 @@
     
     <div class="container border border-warning mt-5 card p-3 w-25">
 
+      <!--The th:object attribute:
+            1. Binds the entire form to the UserData object.
+            2. Automatically maps form fields to the properties of UserData (like userName, userEmail, etc.).
+            3. Enables validation and error handling through Spring's BindingResult. -->
         <form method="post" th:action="@{/success}" th:object="${userData}">
 
             <!-- name label and input  -->
             <div class="mb-3">
               <label for="exampleInputEmail1" class="form-label">User Name</label>
+              <!-- The th:value attribute binds the current value of the form field to a property of the UserData object: -->
+               <!-- This ensures that if the form is submitted with invalid data, the previous values entered by the user are retained on the form when redisplayed. -->
               <input th:value="${userData.userName}" type="text" class="form-control" id="name" name="userName" th:classappend="${#fields.hasErrors()}? 'is-invalid' : '' ">
 
               <div th:each="e: ${#fields.errors('userName')}" id="validationServer03Feedback" class="invalid-feedback">

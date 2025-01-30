@@ -7,14 +7,15 @@ import jakarta.validation.constraints.Size;
 
 public class UserData {
 
-    @NotBlank(message = "Name can't be empty !!")
-    @Size(min = 3, max = 7, message = "Enter userName size between 3 to 7 char !!")
+    //these annotations comes form Hibernate Validation;
+    @NotBlank(message = "Name can't be empty !!") //make sure the value of this attribute is not empty;
+    @Size(min = 3, max = 7, message = "Enter userName size between 3 to 7 char !!") //if length of attribute value is not between given range it throw this message;
     private String userName;
 
-    @Pattern(regexp = "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$", message = "Invalid Email !!")
+    @Pattern(regexp = "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$", message = "Invalid Email !!") //regular expression to check mail formate;
     private String userEmail;
 
-    @AssertTrue(message = "check it first !!")
+    @AssertTrue(message = "check it first !!") //throw this message if the value of this attribute is false;
     private boolean terms;
 
     
