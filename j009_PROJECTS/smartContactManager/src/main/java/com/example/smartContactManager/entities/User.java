@@ -31,7 +31,10 @@ public class User {
     private String about;
 
     private String role;
+
+    @Column(nullable = false, columnDefinition = "TINYINT(1)") //by default it set this column dataType as bit which arise problem in mariaDB so i manually set it as tinyint;
     private boolean enabled;
+    
     private String image;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user") //mapped by user map these all contacts with some user;
@@ -109,6 +112,15 @@ public class User {
     public void setContacts(List<Contact> contacts) {
         this.contacts = contacts;
     }
+
+    @Override
+    public String toString() {
+        return "User [userId=" + userId + ", name=" + name + ", email=" + email + ", password=" + password + ", about="
+                + about + ", role=" + role + ", enabled=" + enabled + ", image=" + image + ", contacts=" + contacts
+                + "]";
+    }
+
+    
 
 }
 

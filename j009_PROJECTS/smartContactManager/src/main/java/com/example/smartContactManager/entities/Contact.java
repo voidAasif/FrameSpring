@@ -101,4 +101,11 @@ public class Contact {
         this.user = user;
     }
 
+    @Override
+    public String toString() {
+        return "Contact [contactId=" + contactId + ", name=" + name + ", nicName=" + nicName + ", email=" + email
+                + ", image=" + image + ", description=" + description + ", phone=" + phone + ", work=" + work
+                + ", user=" + user + "]";
+    }
+
 }
