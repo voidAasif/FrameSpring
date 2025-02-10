@@ -37,7 +37,13 @@
                                     required 
                                     th:value="${user.name}"
                                     name="name"
+                                    th:classappend="${#fields.hasErrors}? 'is-invalid' : ''"
                                 />
+                                <!-- errors -->
+                                <div id="validationServerUsernameFeedback" class="invalid-feedback">
+                                    <p th:each="e : ${#fields.errors('name')}" th:text="${e}"></p>
+                                </div>
+                            
                             </div>
 
                             <!-- mail field  -->
@@ -51,7 +57,12 @@
                                     required 
                                     th:value="${user.email}"
                                     name="email"
+                                    th:classappend="${#fields.hasErrors('email')}? 'is-invalid' : ''"
                                 />
+                                <!-- errors -->
+                                <div id="validationServerUsernameFeedback" class="invalid-feedback">
+                                    <p th:each="e : ${#fields.errors('email')}" th:text="${e}"></p>
+                                </div>
                             </div>
 
                             <!-- password field  -->
@@ -64,7 +75,12 @@
                                     placeholder="Enter Here"
                                     required 
                                     name="password"
+                                    th:classappend="${#fields.hasErrors('password')}? 'is-invalid' : ''"
                                 />
+                                <!-- errors -->
+                                <div id="validationServerUsernameFeedback" class="invalid-feedback">
+                                    <p th:each="e : ${#fields.errors('password')}" th:text="${e}"></p>
+                                </div>
                             </div>
 
                             <!-- about field  -->
@@ -76,7 +92,12 @@
                                     placeholder="Enter something about yourself..."
                                     th:text="${user.about}"
                                     name="about"
+                                    th:classappend="${#fields.hasErrors('about')}? 'is-invalid' : ''"
                                 ></textarea>
+                                <!-- errors -->
+                                <div id="validationServerUsernameFeedback" class="invalid-feedback">
+                                    <p th:each="e : ${#fields.errors('about')}" th:text="${e}"></p>
+                                </div>
                             </div>
 
                             <!-- terms and conditions  -->

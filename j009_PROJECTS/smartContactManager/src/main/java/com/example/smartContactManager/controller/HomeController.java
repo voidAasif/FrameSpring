@@ -3,6 +3,7 @@ package com.example.smartContactManager.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +14,7 @@ import com.example.smartContactManager.entities.User;
 import com.example.smartContactManager.helper.Message;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 
 @Controller
 public class HomeController {
@@ -42,10 +44,18 @@ public class HomeController {
     //this handler for registering user;
     
     @PostMapping("/do_register") //execute when submit button clicked;
-    public String registerUser(@ModelAttribute("user") User user, @RequestParam(value = "agreement", defaultValue = "false") boolean agreement, Model model, HttpSession httpSession){
+    public String registerUser(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, @RequestParam(value = "agreement", defaultValue = "false") boolean agreement, Model model, HttpSession httpSession){
         //ModelAttribute is used to get user from form;
         //RequestParm is used to get any value from html page;
         //HttpSession is used to display the message;
+
+        if (bindingResult.hasErrors()){
+            System.out.println("**************************************");
+            System.out.println(bindingResult.getAllErrors()); //log;
+            System.out.println("**************************************");
+
+            return "signup"; //error- display same form;
+        }
 
         try {
             user.setEnabled(true); //set empty values of user;
@@ -61,8 +71,9 @@ public class HomeController {
                 throw new Exception("Please accept the terms and conditions first"); //throw exception and jump to catch block;
             }
 
-            User savedUser = userRepository.save(user); //save user into DB;
-            System.out.println("saved user: "+ savedUser); //log;
+            //temporary block the DB for validation testing;
+            // User savedUser = userRepository.save(user); //save user into DB;
+            // System.out.println("saved user: "+ savedUser); //log;
 
             //now we can access it in HTML by (${session.className.attribute}), we take content to store message and type to append class name in css;
             httpSession.setAttribute("message", new Message("Data submit successfully", "alert-success"));
@@ -78,7 +89,7 @@ public class HomeController {
             model.addAttribute("user", user);
         }
         
-        return "signup";
+        return "signup"; //success- change view; currently not changed;
     }
 }
 

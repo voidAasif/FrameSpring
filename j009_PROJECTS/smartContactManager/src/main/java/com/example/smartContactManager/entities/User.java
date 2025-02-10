@@ -11,6 +11,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "USER")
@@ -20,14 +23,21 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int userId;
 
+    @NotBlank(message = "Name not be empty!!")
+    @Size(max = 20, min = 3, message = "Please enter name between 3 to 20 characters!!")
     private String name;
 
     @Column(unique = true)
+    @Pattern(regexp = "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$", message = "Invalid Email!!")
     private String email;
 
+    @Pattern(regexp = ".*[A-Za-z].*", message = "Password must contain at least one letter.")
+    @Pattern(regexp = ".*\\d.*", message = "Password must contain at least one digit.")
+    @Pattern(regexp = ".*[^A-Za-z\\d].*", message = "Password must contain at least one special character.")
     private String password;
 
     @Column(length = 100)
+    @Size(max = 100, message = "About must contains max 100 characters!!")
     private String about;
 
     private String role;
