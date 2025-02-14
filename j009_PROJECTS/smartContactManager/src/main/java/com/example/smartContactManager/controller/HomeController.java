@@ -1,6 +1,7 @@
 package com.example.smartContactManager.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,6 +22,9 @@ public class HomeController {
 
     @Autowired
     private UserRepository userRepository; //to use JPA methods;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
     
     @GetMapping("/")
     public String home(Model model){ //show home page;
@@ -71,9 +75,12 @@ public class HomeController {
                 throw new Exception("Please accept the terms and conditions first"); //throw exception and jump to catch block;
             }
 
+            //encode password;
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+
             //temporary block the DB for validation testing;
-            // User savedUser = userRepository.save(user); //save user into DB;
-            // System.out.println("saved user: "+ savedUser); //log;
+            User savedUser = userRepository.save(user); //save user into DB;
+            System.out.println("saved user: "+ savedUser); //log;
 
             //now we can access it in HTML by (${session.className.attribute}), we take content to store message and type to append class name in css;
             httpSession.setAttribute("message", new Message("Data submit successfully", "alert-success"));
@@ -89,7 +96,34 @@ public class HomeController {
             model.addAttribute("user", user);
         }
         
-        return "signup"; //success- change view; currently not changed;
+        return "login"; //success- change view; currently not changed;
+    }
+
+    @GetMapping("/login")
+    public String loginPage() {
+        return "login";
+    }
+
+    @PostMapping("/do_login")
+    public String loginUser(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, Model model, HttpSession httpSession) {
+        
+        try {
+            
+            if (bindingResult.hasErrors()) {
+                System.out.println("has errors so display login page");
+
+                System.out.println(bindingResult.getAllErrors());
+
+                return "login";
+            }
+
+        } catch (Exception e) {
+            System.out.println("exception in do_login in home controller ");
+            httpSession.setAttribute("message", new Message("Something went wrong !!" + e.getMessage(), "alert-danger"));
+            model.addAttribute("user", user);
+        }
+        System.out.println("not have any error and exceptions so display user dashboard");
+        return "user/userDashboard";
     }
 }
 
