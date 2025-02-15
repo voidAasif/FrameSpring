@@ -24,7 +24,7 @@ public class HomeController {
     private UserRepository userRepository; //to use JPA methods;
 
     @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
+    private BCryptPasswordEncoder passwordEncoder; // bean from MyConfig;
     
     @GetMapping("/")
     public String home(Model model){ //show home page;
@@ -99,12 +99,12 @@ public class HomeController {
         return "login"; //success- change view; currently not changed;
     }
 
-    @GetMapping("/login")
+    @GetMapping("/login") //display login page;
     public String loginPage() {
         return "login";
     }
 
-    @PostMapping("/do_login")
+    @PostMapping("/do_login") //login page action;
     public String loginUser(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, Model model, HttpSession httpSession) {
         
         try {

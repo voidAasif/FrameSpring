@@ -12,11 +12,11 @@ import org.springframework.stereotype.Service;
 public class CustomUserDetailsService implements UserDetailsService {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserRepository userRepository; // user UserRepository to access User from DB;
 
-    @Override
+    @Override //this method is automatically call by the Spring Security (DaoAuthenticationProvider), and this provider use UserDetail to get correct username;
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.getUserByUserName(username);
+        User user = userRepository.getUserByUserName(username); // with the help of this UserName UserRepository fetch the User form DB;
         if (user == null) {
             System.out.println("exception: user not found in db");
             throw new UsernameNotFoundException("User not found!");
@@ -24,6 +24,6 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         System.out.println("aasif log: " + user); //log;
 
-        return new CustomUserDetails(user);
+        return new CustomUserDetails(user); // set User in UserDetails;
     }
 }

@@ -18,46 +18,46 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class MyConfig {
 
-    @Bean
-    public UserDetailsService userDetailsService() {
+    @Bean //Bean is used to create Object, we use it by @Autowired annotation;
+    public UserDetailsService userDetailsService() { // UserDetailsService used to set user credentials into Spring Security;
         return new CustomUserDetailsService();
     }
 
     @Bean
-    public BCryptPasswordEncoder passwordEncoder(){
+    public BCryptPasswordEncoder passwordEncoder(){ // used to encode and decode user password;
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
-    public DaoAuthenticationProvider authenticationProvider() {
+    @Bean //Configures authentication provider to validate user credentials;
+    public DaoAuthenticationProvider authenticationProvider() { //use above Beans hear;
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(this.userDetailsService());
-        provider.setPasswordEncoder(this.passwordEncoder());
+        provider.setUserDetailsService(this.userDetailsService()); // set UserDetailsService;
+        provider.setPasswordEncoder(this.passwordEncoder()); // set BCryptPasswordEncoder;
         return provider;
     }
 
-    @Bean
+    @Bean // set DaoAuthenticationProvider in Spring Security;
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return new ProviderManager(List.of(authenticationProvider())); 
     }
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    @Bean // Defines security rules and configurations for handling requests;
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception { //view access configuration;
         http
                 .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth
+                .authorizeHttpRequests(auth -> auth //config for authentication;
                         .requestMatchers("/", "/about", "/home", "/signup", "/login", "/css/**", "/js/**", "/img/**", "/do_register")
-                        .permitAll()
-                        .anyRequest().authenticated())
-                .formLogin(form -> form
-                        .loginPage("/login")
-                        .loginProcessingUrl("/do_login")
-                        .defaultSuccessUrl("/user/dashboard", true)
-                        .permitAll())
-                .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login?logout")
-                        .permitAll());
+                        .permitAll() //all requestMatchers permit;
+                        .anyRequest().authenticated()) //remains secure;
+                .formLogin(form -> form //config for loginForm;
+                        .loginPage("/login") //login form path;
+                        .loginProcessingUrl("/do_login") //login form action;
+                        .defaultSuccessUrl("/user/dashboard", true) //if login success then goto here;
+                        .permitAll()) //Allows all users to access the login page;
+                .logout(logout -> logout //config for logout;
+                        .logoutUrl("/logout") //URL for logout action;
+                        .logoutSuccessUrl("/login?logout") //Redirect to login page after logout;
+                        .permitAll()); //Allows all users to access logout URL
 
         return http.build();
     }

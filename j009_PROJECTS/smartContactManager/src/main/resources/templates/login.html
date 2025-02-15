@@ -18,6 +18,8 @@
                         <h1 class="text-center">Login Here</h1>
 
                         <!-- Login Form -->
+
+                        <!-- Spring Security automatically maps name="username" to the username field -->
                         <form th:action="@{/do_login}" method="post">
                             <div class="form-group">
                                 <label for="username">Email / Username</label>
@@ -28,6 +30,7 @@
                                 required>
                             </div>
                             
+                            <!-- Spring Security automatically maps name="password" to the password field -->
                             <div class="form-group">
                                 <label for="password">Password</label>
                                 <input type="password" 
@@ -37,6 +40,7 @@
                                 required>
                             </div>
 
+                            <!-- On submit, Spring Security processes authentication with the provided username & password -->
                             <button type="submit" class="btn bg-primary text-white">Login</button>
                         </form>
 
