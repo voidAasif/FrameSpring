@@ -100,31 +100,11 @@ public class HomeController {
     }
 
     @GetMapping("/login") //display login page;
-    public String loginPage() {
+    public String loginPage(Model model) {
+        model.addAttribute("title", "Login - Smart Contact Manager");
         return "login";
     }
 
-    @PostMapping("/do_login") //login page action;
-    public String loginUser(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, Model model, HttpSession httpSession) {
-        
-        try {
-            
-            if (bindingResult.hasErrors()) {
-                System.out.println("has errors so display login page");
-
-                System.out.println(bindingResult.getAllErrors());
-
-                return "login";
-            }
-
-        } catch (Exception e) {
-            System.out.println("exception in do_login in home controller ");
-            httpSession.setAttribute("message", new Message("Something went wrong !!" + e.getMessage(), "alert-danger"));
-            model.addAttribute("user", user);
-        }
-        System.out.println("not have any error and exceptions so display user dashboard");
-        return "user/userDashboard";
-    }
 }
 
 

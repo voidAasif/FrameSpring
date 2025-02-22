@@ -48,10 +48,12 @@ public class MyConfig {
                 .authorizeHttpRequests(auth -> auth //config for authentication;
                         .requestMatchers("/", "/about", "/home", "/signup", "/login", "/css/**", "/js/**", "/img/**", "/do_register")
                         .permitAll() //all requestMatchers permit;
+                        .requestMatchers("/admin/**").hasRole("ADMIN_ROLE") // Only ADMIN can access /admin/**
+                        .requestMatchers("/normal/**").hasRole("USER_ROLE") // Only USER can access /user/**
                         .anyRequest().authenticated()) //remains secure;
                 .formLogin(form -> form //config for loginForm;
                         .loginPage("/login") //login form path;
-                        .loginProcessingUrl("/do_login") //login form action;
+                        .loginProcessingUrl("/login") //login form action;
                         .defaultSuccessUrl("/user/dashboard", true) //if login success then goto here;
                         .permitAll()) //Allows all users to access the login page;
                 .logout(logout -> logout //config for logout;
