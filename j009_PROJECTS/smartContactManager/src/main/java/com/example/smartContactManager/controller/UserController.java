@@ -1,7 +1,13 @@
 package com.example.smartContactManager.controller;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.nio.file.attribute.FileAttribute;
 import java.security.Principal;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -48,18 +54,36 @@ public class UserController {
 
     @PostMapping("/process_contact")
     public String processContact(@ModelAttribute("contact") Contact contact, @RequestParam("profileImage") MultipartFile file, Principal principal){
-        String username = principal.getName();
+        
+        try {   
+            String username = principal.getName(); //get current username;
+            User user = userRepository.getUserByUserName(username); //find user by username;
+            contact.setUser(user); //multidirectional mapping, so set user in contact;
+            user.getContacts().add(contact); //add contact in contact list;
 
-        User user = userRepository.getUserByUserName(username);
 
-        contact.setUser(user);
+            //process profile image;
+            if(file.isEmpty()){
+                System.out.println("Image file is empty"); //log;
+            }
+            else {
+                contact.setImage(file.getOriginalFilename()); //set image name into contact;
 
-        user.getContacts().add(contact);
+                String uploadedImagePath = new ClassPathResource("/static/uploads/").getFile().getAbsolutePath(); //get path to store image;
 
-        userRepository.save(user);
+                Files.copy(file.getInputStream(), Path.of(uploadedImagePath + file.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING); //copy input image into given path;
 
-        contact.setImage(file.getOriginalFilename());
-        System.out.println(contact);
+            }
+            
+
+            userRepository.save(user); //save user with contact in DB;
+            System.out.println(contact); //log;
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Exception occur when saving contact in DB");
+        }
+
+
         return "normal/addContact";
     }
 }
