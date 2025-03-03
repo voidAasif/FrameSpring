@@ -47,7 +47,17 @@ public class UserController {
     }
 
     @PostMapping("/process_contact")
-    public String processContact(@ModelAttribute("contact") Contact contact, @RequestParam("imagee") MultipartFile file){
+    public String processContact(@ModelAttribute("contact") Contact contact, @RequestParam("profileImage") MultipartFile file, Principal principal){
+        String username = principal.getName();
+
+        User user = userRepository.getUserByUserName(username);
+
+        contact.setUser(user);
+
+        user.getContacts().add(contact);
+
+        userRepository.save(user);
+
         contact.setImage(file.getOriginalFilename());
         System.out.println(contact);
         return "normal/addContact";
