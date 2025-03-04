@@ -2,9 +2,7 @@ package com.example.smartContactManager.controller;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.nio.file.attribute.FileAttribute;
 import java.security.Principal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -20,6 +18,9 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.smartContactManager.dao.UserRepository;
 import com.example.smartContactManager.entities.Contact;
 import com.example.smartContactManager.entities.User;
+import com.example.smartContactManager.helper.Message;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/user")
@@ -53,7 +54,7 @@ public class UserController {
     }
 
     @PostMapping("/process_contact")
-    public String processContact(@ModelAttribute("contact") Contact contact, @RequestParam("profileImage") MultipartFile file, Principal principal){
+    public String processContact(@ModelAttribute("contact") Contact contact, @RequestParam("profileImage") MultipartFile file, Principal principal, HttpSession httpSession){
         
         try {   
             String username = principal.getName(); //get current username;
@@ -78,7 +79,14 @@ public class UserController {
 
             userRepository.save(user); //save user with contact in DB;
             System.out.println(contact); //log;
+
+            //success message;
+            httpSession.setAttribute("message", new Message("Contact Add Successfully", "alert-success"));
+
         } catch (Exception e) {
+            //error message;
+            httpSession.setAttribute("message", new Message("Error while adding Contact", "alert-danger"));
+
             e.printStackTrace();
             System.out.println("Exception occur when saving contact in DB");
         }
