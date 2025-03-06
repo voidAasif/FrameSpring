@@ -42,7 +42,8 @@
                                     id="firstName" 
                                     name="name" 
                                     placeholder="First Name"
-                                    class="form-control">
+                                    class="form-control"
+                                    required>
                             </div>
 
                             <!-- Second Name  -->
@@ -70,7 +71,8 @@
                                     id="phone" 
                                     name="phone" 
                                     placeholder="Contact Number"
-                                    class="form-control">
+                                    class="form-control"
+                                    required>
                             </div>
 
                             <!-- Email  -->
@@ -84,7 +86,8 @@
                                     id="email" 
                                     name="email" 
                                     placeholder="Enter Email"
-                                    class="form-control">
+                                    class="form-control"
+                                    required>
                             </div>
 
                             <!-- Work  -->
@@ -126,6 +129,14 @@
             </div>
         </div>
 
+        <!-- TinyMCE -->
+        <script type="text/javascript" src="https://cdn.tiny.cloud/1/qagffr3pkuv17a8on1afax661irst1hbr4e6tbv888sz91jc/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+        <script>
+            tinymce.init({
+                selector: '#description',
+                width: '100%'
+            });   
+        </script>
 
     </section>
 </body>
