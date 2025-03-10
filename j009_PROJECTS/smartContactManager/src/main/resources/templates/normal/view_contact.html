@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{normal/base::layout(~{::section})}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <section>
+      <div class="card mr-5 ml-3">
+        <div class="card-body">
+            <h1 class="text-center">View Contact</h1>
+      
+            <div class="container-fluid mt-5"></div>
+          
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">ContactId</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Phone</th>
+                  <th scope="col">Email</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+
+              <tbody>
+
+                <tr th:each="e : ${contactList}">
+                  <td th:text="${'CID00'+e.contactId}"></td>
+                  <td th:text="${e.name}"></td>
+                  <td th:text="${e.phone}"></td>
+                  <td th:text="${e.email}"></td>
+                  <td>
+                    <button class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></button>
+                    <button class="btn btn-primary btn-sm"><i class="fa-solid fa-square-pen"></i></button>
+                  </td>
+                </tr>
+
+              </tbody>
+            </table>
+        </div>
+      </div>
+    </section>
+</body>
+</html>
+
+

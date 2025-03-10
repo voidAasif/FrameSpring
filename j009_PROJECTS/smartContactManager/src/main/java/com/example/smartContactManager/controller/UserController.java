@@ -4,6 +4,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.security.Principal;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.smartContactManager.dao.UserRepository;
+import com.example.smartContactManager.dao.ContactRepository;
 import com.example.smartContactManager.entities.Contact;
 import com.example.smartContactManager.entities.User;
 import com.example.smartContactManager.helper.Message;
@@ -28,6 +31,9 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ContactRepository contactRepository;
 
     @ModelAttribute
     public void addCommonData(Model model, Principal principal){
@@ -93,5 +99,19 @@ public class UserController {
 
 
         return "normal/addContact";
+    }
+
+    @GetMapping("/view_contact")
+    public String viewContact(Model model, Principal principal){
+        model.addAttribute("title", "View-Contact");
+
+        String currentUserName = principal.getName(); //find current username by principal;
+        User currentUser = userRepository.getUserByUserName(currentUserName); //find current user by username;
+        int currentUserId = currentUser.getUserId(); //find user id form current user;
+        List<Contact> contactList = contactRepository.findByUserUserId(currentUserId); //find list of contact of current user id;
+
+        model.addAttribute("contactList", contactList); //set contact list into contact;
+        
+        return "normal/view_contact";
     }
 }
