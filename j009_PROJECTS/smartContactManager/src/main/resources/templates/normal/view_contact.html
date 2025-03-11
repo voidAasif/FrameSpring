@@ -27,9 +27,16 @@
 
                 <tr th:each="e : ${contactList}">
                   <td th:text="${'CID00'+e.contactId}"></td>
-                  <td th:text="${e.name}"></td>
+                  <td>
+                    <span><img th:src="@{${'/uploads'+e.image}}" class="my-profile-image" src="" alt="profile image" srcset=""></span>
+                    <span th:text="${e.name}"></span>
+                  </td>
                   <td th:text="${e.phone}"></td>
-                  <td th:text="${e.email}"></td>
+                  <td>
+                    <a href="#" th:href="@{${'/user/contact/'+e.contactId}}">
+                      <span th:text="${e.email}"></span>
+                    </a>
+                  </td>
                   <td>
                     <button class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></button>
                     <button class="btn btn-primary btn-sm"><i class="fa-solid fa-square-pen"></i></button>

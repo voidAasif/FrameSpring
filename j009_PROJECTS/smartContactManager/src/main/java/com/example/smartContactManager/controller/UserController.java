@@ -76,6 +76,7 @@ public class UserController {
             //process profile image;
             if(file.isEmpty()){
                 System.out.println("Image file is empty"); //log;
+                contact.setImage("default.png");
             }
             else {
                 contact.setImage(file.getOriginalFilename()); //set image name into contact;
@@ -131,5 +132,19 @@ public class UserController {
         model.addAttribute("totalPages", contactList.getTotalPages()); //Page has a method which return total number of pages, we no need to divide it manually;
         
         return "normal/view_contact";
+    }
+
+    //display contact details;
+    @GetMapping("/contact/{contactId}")
+    public String displayContact(@PathVariable("contactId") int contactId, Model model){
+
+        model.addAttribute("title", "Contact-Details");
+
+        //fetch contact form db;
+        Contact contact = contactRepository.findByContactId(contactId); //find contact by given contactId;
+
+        model.addAttribute("contact", contact); //add contact into template;
+
+        return "normal/contact";
     }
 }
