@@ -4,14 +4,18 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.security.Principal;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -101,16 +105,30 @@ public class UserController {
         return "normal/addContact";
     }
 
-    @GetMapping("/view_contact")
-    public String viewContact(Model model, Principal principal){
+    //apply pagination using pathVariable;
+    //we need per page 5 contact;
+    //and current page;
+    @GetMapping("/view_contact/{currentPage}")
+    public String viewContact(@PathVariable("currentPage") Integer currentPage, Model model, Principal principal){
         model.addAttribute("title", "View-Contact");
 
         String currentUserName = principal.getName(); //find current username by principal;
         User currentUser = userRepository.getUserByUserName(currentUserName); //find current user by username;
         int currentUserId = currentUser.getUserId(); //find user id form current user;
-        List<Contact> contactList = contactRepository.findByUserUserId(currentUserId); //find list of contact of current user id;
+
+        //Pageable hold two parameters | PageRequest.of take two values which holds by Pageable; 
+        //1. pageNumber zero-based page number, must not be negative.
+        //2. pageSize the size of the page to be returned, must be greater than 0.
+        Pageable pageable = PageRequest.of(currentPage, 5);
+
+        //page is the subclass of List, used to implement pagination;
+        Page<Contact> contactList = contactRepository.findByUserUserId(currentUserId, pageable); //find list of contact of current user id;
 
         model.addAttribute("contactList", contactList); //set contact list into contact;
+
+        //set attributes to use page navigation in view_contact.html;
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("totalPages", contactList.getTotalPages()); //Page has a method which return total number of pages, we no need to divide it manually;
         
         return "normal/view_contact";
     }
