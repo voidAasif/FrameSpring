@@ -6,7 +6,8 @@
 </head>
 <body>
     <section>
-        <div class="card mr-5 ml-3">
+        <!-- show if contact is not empty -->
+        <div class="card mr-5 ml-3" th:if="${contact}">
             <div class="card-body">
                 <h1 class="text-center">Contact Details</h1>
 
@@ -53,6 +54,11 @@
                     </div>
                 </div>
             </div>    
+        </div>
+
+        <!-- show if contact is empty -->
+        <div th:unless="${contact}" class="mt-5 ml-3 mr-5 bg-danger text-center text-white rounded">
+            <p class="p-3">This is not your contact !!</p>
         </div>
     </section>
 </body>

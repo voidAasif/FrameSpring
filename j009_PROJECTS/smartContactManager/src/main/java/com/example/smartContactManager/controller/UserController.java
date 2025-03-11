@@ -136,14 +136,20 @@ public class UserController {
 
     //display contact details;
     @GetMapping("/contact/{contactId}")
-    public String displayContact(@PathVariable("contactId") int contactId, Model model){
+    public String displayContact(@PathVariable("contactId") int contactId, Model model, Principal principal){
 
         model.addAttribute("title", "Contact-Details");
 
         //fetch contact form db;
         Contact contact = contactRepository.findByContactId(contactId); //find contact by given contactId;
 
-        model.addAttribute("contact", contact); //add contact into template;
+        //fix security bug: bug(access other contact);
+        String currentUserName = principal.getName(); //find current username by principal;
+        User currentUser = userRepository.getUserByUserName(currentUserName); //find current user by username;
+        int currentUserId = currentUser.getUserId(); //find user id form current user;
+
+        if(currentUserId == contact.getUser().getUserId())
+            model.addAttribute("contact", contact); //add contact into template;
 
         return "normal/contact";
     }
