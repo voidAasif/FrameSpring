@@ -153,4 +153,29 @@ public class UserController {
 
         return "normal/contact";
     }
+
+    @GetMapping("/delete/{contactId}")
+    public String deleteContact(@PathVariable("contactId") int contactId, Model model, Principal principal, HttpSession httpSession){
+        //delete specific contact;
+        System.out.println("DELETE: " + contactId); //log;
+
+        Contact contact = contactRepository.findByContactId(contactId);
+
+        //fix security bug: bug(access delete contact);
+        String currentUserName = principal.getName(); //find current username by principal;
+        User currentUser = userRepository.getUserByUserName(currentUserName); //find current user by username;
+        int currentUserId = currentUser.getUserId(); //find user id form current user;
+
+        if(currentUserId == contact.getUser().getUserId()){
+            contact.setUser(null); //unlink user with contact;
+            contactRepository.delete(contact);
+
+            httpSession.setAttribute("message", new Message("Contact delete Successfully", "alert-success"));
+            System.out.println("Contact delete successfully");
+        }
+
+        //profile image delete pending;
+
+        return "redirect:/user/view_contact/0";
+    }
 }

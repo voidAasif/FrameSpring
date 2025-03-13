@@ -38,8 +38,8 @@
                     </a>
                   </td>
                   <td>
-                    <button class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></button>
-                    <button class="btn btn-primary btn-sm"><i class="fa-solid fa-square-pen"></i></button>
+                    <a th:onclick="|deleteContact(${e.contactId})|" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></a>
+                    <a class="btn btn-primary btn-sm"><i class="fa-solid fa-square-pen"></i></a>
                   </td>
                 </tr>
 
@@ -61,5 +61,8 @@
     </section>
 </body>
 </html>
+
+
+
 
 

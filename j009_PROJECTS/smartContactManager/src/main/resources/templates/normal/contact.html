@@ -49,8 +49,8 @@
                     </div>
 
                     <div class="container mt-5">
-                        <button class="btn btn-danger btn-block">Delete</button>
-                        <button class="btn btn-primary btn-block">Update</button>
+                        <a th:onclick="|deleteContact(${contact.contactId})|" class="btn btn-danger btn-block">Delete</a>
+                        <a class="btn btn-primary btn-block">Update</a>
                     </div>
                 </div>
             </div>    
