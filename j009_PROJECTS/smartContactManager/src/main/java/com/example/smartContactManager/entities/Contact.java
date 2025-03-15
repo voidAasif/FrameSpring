@@ -101,6 +101,12 @@ public class Contact {
         this.user = user;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        //if contactIds are equal = contact are equal;
+        return this.contactId == ((Contact) obj).getContactId();
+    }
+
     // @Override
     // public String toString() {
     //     return "Contact [contactId=" + contactId + ", name=" + name + ", nicName=" + nicName + ", email=" + email

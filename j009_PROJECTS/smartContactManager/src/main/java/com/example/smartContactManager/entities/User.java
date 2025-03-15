@@ -48,7 +48,8 @@ public class User {
     
     private String image;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER) //mapped by user map these all contacts with some user;
+    //orphanRemoval = true -> it is used to delete entity form DB if it unlink form parent entity;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true) //mapped by user map these all contacts with some user;
     private List<Contact> contacts = new ArrayList<>(); //store multiple contacts of single user;
 
 

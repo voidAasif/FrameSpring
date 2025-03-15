@@ -168,8 +168,13 @@ public class UserController {
         int currentUserId = currentUser.getUserId(); //find user id form current user;
 
         if(currentUserId == contact.getUser().getUserId()){
-            contact.setUser(null); //unlink user with contact;
-            contactRepository.delete(contact);
+            //this method only unlink user form contact but not delete the contact;
+            // contact.setUser(null); //unlink user with contact;
+            // contactRepository.delete(contact);
+
+            //here we remove the contact from user, and save update user;
+            currentUser.getContacts().remove(contact);
+            userRepository.save(currentUser);
 
             httpSession.setAttribute("message", new Message("Contact delete Successfully", "alert-success"));
             System.out.println("Contact delete successfully");
