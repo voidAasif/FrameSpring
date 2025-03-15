@@ -1,5 +1,6 @@
 package com.example.smartContactManager.controller;
 
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -83,7 +84,7 @@ public class UserController {
 
                 String uploadedImagePath = new ClassPathResource("/static/uploads/").getFile().getAbsolutePath(); //get path to store image;
 
-                Files.copy(file.getInputStream(), Path.of(uploadedImagePath + file.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING); //copy input image into given path;
+                Files.copy(file.getInputStream(), Path.of(uploadedImagePath + "/" + file.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING); //copy input image into given path;
 
             }
             
@@ -177,5 +178,65 @@ public class UserController {
         //profile image delete pending;
 
         return "redirect:/user/view_contact/0";
+    }
+
+    //display update contact form;
+    @PostMapping("/update_contact/{contactId}")
+    public String updateForm(Model model, @PathVariable("contactId") int contactId){
+        model.addAttribute("title", "Update-Contact");
+
+        Contact contact = contactRepository.findByContactId(contactId);
+
+        model.addAttribute("contact", contact);
+        model.addAttribute("profileImage", contact.getImage());
+
+        return "normal/update_form";
+    }
+
+    //process update contact form;
+    @PostMapping("/process_update_contact")
+    public String processUpdateContact(@ModelAttribute("contact") Contact contact, @RequestParam("profileImage") MultipartFile profileImageFile, Principal principal, HttpSession httpSession){
+
+        System.out.println("Process contact working"); //log;
+        
+        //old contact details;
+        Contact oldContact = contactRepository.findByContactId(contact.getContactId());
+
+        try {
+            //image;
+            if (!profileImageFile.isEmpty()) {
+                System.out.println("Image accept"); //log;
+                //do something;
+                //re-write image file
+
+                //1. delete old photo
+                File deleteImagePath = new ClassPathResource("/static/uploads/").getFile(); //get path to store image;
+                File file = new File(deleteImagePath, oldContact.getImage());
+                file.delete();
+
+
+                //2. add new photo
+                contact.setImage(profileImageFile.getOriginalFilename()); //set image name into contact;
+                String uploadedImagePath = new ClassPathResource("/static/uploads/").getFile().getAbsolutePath(); //get path to store image;
+                Files.copy(profileImageFile.getInputStream(), Path.of(uploadedImagePath + "/" + profileImageFile.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING); //copy input image into given path; 
+            }else {
+                contact.setImage(oldContact.getImage());
+            }
+
+            //update contact;
+            User user = userRepository.getUserByUserName(principal.getName()); //find user by principal username;
+            contact.setUser(user); //link contact with user;
+            contactRepository.save(contact);
+
+            //display success message;
+            httpSession.setAttribute("message", new Message("Contact Updated Successfully", "alert-success"));
+            
+        } catch (Exception e) {
+            //display error message 
+            httpSession.setAttribute("message", new Message("Error while Updating Contact", "alert-danger"));
+            e.printStackTrace();
+        }
+
+        return "redirect:/user/contact/"+contact.getContactId();
     }
 }

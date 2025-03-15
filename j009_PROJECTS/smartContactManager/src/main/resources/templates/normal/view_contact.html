@@ -28,7 +28,7 @@
                 <tr th:each="e : ${contactList}">
                   <td th:text="${'CID00'+e.contactId}"></td>
                   <td>
-                    <span><img th:src="@{${'/uploads'+e.image}}" class="my-profile-image" src="" alt="profile image" srcset=""></span>
+                    <span><img th:src="@{${'/uploads/'+e.image}}" class="my-profile-image" src="" alt="profile image" srcset=""></span>
                     <span th:text="${e.name}"></span>
                   </td>
                   <td th:text="${e.phone}"></td>
@@ -39,7 +39,13 @@
                   </td>
                   <td>
                     <a th:onclick="|deleteContact(${e.contactId})|" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></a>
-                    <a class="btn btn-primary btn-sm"><i class="fa-solid fa-square-pen"></i></a>
+                    <!-- use form for Post method -->
+                    <form action="#" 
+                          method="post"
+                          th:action="@{${'/user/update_contact/'+e.contactId}}">
+
+                      <button type="submit" class="btn btn-primary btn-sm"><i class="fa-solid fa-square-pen"></i></button>
+                    </form>
                   </td>
                 </tr>
 

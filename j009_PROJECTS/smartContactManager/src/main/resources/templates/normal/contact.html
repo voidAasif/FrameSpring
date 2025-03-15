@@ -12,7 +12,7 @@
                 <h1 class="text-center">Contact Details</h1>
 
                 <div class="container text-center">
-                    <span><img th:src="@{${'/uploads'+contact.image}}" style="height: 200px; width: 200px;" class="my-profile-image" src="" alt="profile image" srcset=""></span>
+                    <span><img th:src="@{${'/uploads/'+contact.image}}" style="height: 200px; width: 200px;" class="my-profile-image" src="" alt="profile image" srcset=""></span>
 
                     <h3 th:text="${ #strings.toUpperCase(contact.name +' - '+ contact.nicName) }"></h3>
 
@@ -50,7 +50,13 @@
 
                     <div class="container mt-5">
                         <a th:onclick="|deleteContact(${contact.contactId})|" class="btn btn-danger btn-block">Delete</a>
-                        <a class="btn btn-primary btn-block">Update</a>
+                        <!-- use form for Post method -->
+                        <form action="#" 
+                                method="post"
+                                th:action="@{${'/user/update_contact/'+contact.contactId}}">
+
+                            <button type="submit" class="btn btn-primary btn-block mt-3">Update</button>
+                        </form>
                     </div>
                 </div>
             </div>    
