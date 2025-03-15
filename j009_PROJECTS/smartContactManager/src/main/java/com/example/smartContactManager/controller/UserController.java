@@ -244,4 +244,15 @@ public class UserController {
 
         return "redirect:/user/contact/"+contact.getContactId();
     }
+
+    //profile;
+    @GetMapping("/profile")
+    public String yourProfile(Model model, Principal principal){
+        model.addAttribute("title", "Your-Profile");
+
+        User user = userRepository.getUserByUserName(principal.getName());
+        model.addAttribute("user", user);
+
+        return "normal/profile";
+    }
 }

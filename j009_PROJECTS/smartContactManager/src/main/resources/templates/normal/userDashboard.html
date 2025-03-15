@@ -6,18 +6,19 @@
 </head>
 <body>
     <section>
-        <h1>i am user dashboard</h1>
+        <!-- show if contact is not empty -->
+        <div class="card mr-5 ml-3">
+            <div class="card-body mt-5">
+                <div class="container text-center">
+                    <span><img th:src="@{/uploads/smartContactManagerLogo.png}" style="height: 200px; width: 200px;" class="my-profile-image" src="" alt="profile image" srcset=""></span>
+                </div>
+                <h1 class="text-center mt-5 text-secondary font-italic font-weight-light">Start adding your contacts on cloud...</h1>
 
-        <h2 th:text="${user.name}"></h2>
-        <h2 th:text="${user.email}"></h2>
-        <h2 th:text="${user.password}"></h2>
-        <h2 th:text="${user.about}"></h2>
-        <h2 th:text="${user.role}"></h2>
-        <h2 th:text="${user.enabled}"></h2>
-        <h2 th:text="${user.image}"></h2>
-        <span th:each="e : ${user.contacts}">
-            <h3 th:text="${e}"></h3>
-        </span>
+                <a th:href="@{/user/addContact}" class="btn btn-primary btn-block text-uppercase mt-4">Add new Contact</a>
+            </div>
+        </div>     
     </section>
 </body>
 </html>
+
+
