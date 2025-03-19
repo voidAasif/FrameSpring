@@ -211,7 +211,6 @@ public class UserController {
             //image;
             if (!profileImageFile.isEmpty()) {
                 System.out.println("Image accept"); //log;
-                //do something;
                 //re-write image file
 
                 //1. delete old photo

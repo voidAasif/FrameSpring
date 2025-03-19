@@ -1,5 +1,7 @@
 package com.example.smartContactManager.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -27,6 +29,7 @@ public class Contact {
     private String work;
 
     @ManyToOne //append user(foreign key) column in contact table; eg: | contact1 | user1 |, means contact1 is a contact of user1;
+    @JsonIgnore //use this annotation to ignore loop in SearchController;
     private User user;
 
     public int getContactId() {
