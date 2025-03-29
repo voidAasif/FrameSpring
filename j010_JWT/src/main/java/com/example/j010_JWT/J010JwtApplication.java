@@ -8,6 +8,8 @@ public class J010JwtApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(J010JwtApplication.class, args);
+
+		System.out.println("Done");
 	}
 
 }
