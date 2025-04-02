@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -39,9 +40,10 @@ public class MySecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception { //view access configuration;
         http
                 .csrf(csrf -> csrf.disable()) //disable csrf;
-                .authorizeHttpRequests(auth -> auth.requestMatchers("/login").permitAll().anyRequest().authenticated()) //block all URL except "/login"
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) //login every time;
+                .authorizeHttpRequests(auth -> auth.requestMatchers("/token").permitAll().anyRequest().authenticated()) //block all URL except "/login";
                 .formLogin(form -> form //config for loginForm;
-                        .defaultSuccessUrl("/welcome", true) //if login success then goto here;
+                        .defaultSuccessUrl("/token", true) //if login success then goto here;
                         .permitAll()); //Allows all users to access the login page;
 
         return http.build();
