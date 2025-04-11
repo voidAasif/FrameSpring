@@ -9,45 +9,51 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.example.j010_JWT.service.CustomUserDetailsService;
 
 @Configuration
-@EnableWebSecurity //enable security features, This tells Spring Boot that you want to take control of your application's security configuration;
+@EnableWebSecurity
 public class MySecurityConfig {
 
     @Bean
-    public CustomUserDetailsService customUserDetailsService(){ //my user details service;
-        return new CustomUserDetailsService();
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder(){ //to encode password, used in CustomUserDetailsService;
+    public PasswordEncoder passwordEncoder() { //to encode password, used in CustomUserDetailsService;
         return new BCryptPasswordEncoder();
     }
 
     @Bean
-    public DaoAuthenticationProvider daoAuthenticationProvider(){ //set CustomUserDetailsService and BCryptPasswordEncoder into DaoAuthenticationProvider;
+    public DaoAuthenticationProvider daoAuthenticationProvider(CustomUserDetailsService customUserDetailsService) {  //set CustomUserDetailsService and BCryptPasswordEncoder into DaoAuthenticationProvider;
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-
-        provider.setUserDetailsService(this.customUserDetailsService());
-        provider.setPasswordEncoder(this.passwordEncoder());
-
+        provider.setUserDetailsService(customUserDetailsService);
+        provider.setPasswordEncoder(passwordEncoder());
         return provider;
     }
 
-    @Bean // Defines security rules and configurations for handling requests;
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception { //view access configuration;
+    // @Bean //cause circular dependency;
+    // public CustomUserDetailsService customUserDetailsService(){ //my user details service;
+    //     return new CustomUserDetailsService();
+    // }
+
+    // @Autowired //cause circular dependency;
+    // private JwtAuthenticationFilter jwtAuthenticationFilter;
+
+    @Bean //use this instead of above comment;
+    public JwtAuthenticationFilter jwtAuthenticationFilter(CustomUserDetailsService customUserDetailsService) {
+        return new JwtAuthenticationFilter(customUserDetailsService);
+    }
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception {
         http
-                .csrf(csrf -> csrf.disable()) //disable csrf;
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) //login every time;
-                .authorizeHttpRequests(auth -> auth.requestMatchers("/token").permitAll().anyRequest().authenticated()) //block all URL except "/login";
-                .formLogin(form -> form //config for loginForm;
-                        .defaultSuccessUrl("/token", true) //if login success then goto here;
-                        .permitAll()); //Allows all users to access the login page;
+            .csrf(csrf -> csrf.disable())
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/token").permitAll()
+                .anyRequest().authenticated()
+            )
+            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); //add JwtAuthenticationFilter before config;
 
         return http.build();
     }
-
-    
 }
