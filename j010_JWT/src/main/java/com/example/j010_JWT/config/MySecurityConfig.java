@@ -1,5 +1,6 @@
 package com.example.j010_JWT.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -43,6 +44,9 @@ public class MySecurityConfig {
         return new JwtAuthenticationFilter(customUserDetailsService);
     }
 
+    @Autowired
+    private JwtAuthenticationEntryPoint entryPoint;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception {
         http
@@ -52,7 +56,8 @@ public class MySecurityConfig {
                 .requestMatchers("/token").permitAll()
                 .anyRequest().authenticated()
             )
-            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); //add JwtAuthenticationFilter before config;
+            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class) //add JwtAuthenticationFilter before config;
+            .exceptionHandling(exception -> exception.authenticationEntryPoint(entryPoint));
 
         return http.build();
     }
