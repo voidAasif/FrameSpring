@@ -12,6 +12,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,6 +40,9 @@ public class UserController {
 
     @Autowired
     private ContactRepository contactRepository;
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @ModelAttribute
     public void addCommonData(Model model, Principal principal){
@@ -253,5 +257,40 @@ public class UserController {
         model.addAttribute("user", user);
 
         return "normal/profile";
+    }
+
+    @GetMapping("/settings")
+    public String viewSettings(Model model){
+        model.addAttribute("title", "Settings");
+
+        return "normal/settings";
+    }
+
+    @PostMapping("/process-settings")
+    public String processContact(@ModelAttribute("oldPassword") String oldPassword, @ModelAttribute("newPassword") String newPassword, Principal principal, HttpSession httpSession){
+
+        System.out.println(oldPassword); //log;
+        System.out.println(newPassword); //log;
+
+        User currentUser = userRepository.getUserByUserName(principal.getName());
+
+        if(bCryptPasswordEncoder.matches(oldPassword, currentUser.getPassword())){
+            //update password;
+
+            //set encoded password into currentUser
+            currentUser.setPassword(bCryptPasswordEncoder.encode(newPassword));
+            //then save currentUser into DB:
+            userRepository.save(currentUser);
+
+            httpSession.setAttribute("message", new Message("Password Changed Successfully", "alert-success"));
+
+            return "redirect:/user/dashboard";
+        }else {
+            //error;
+            System.out.println("You enter wrong Password"); //log;
+            httpSession.setAttribute("message", new Message("You Enter Wrong Password", "alert-danger"));
+        }
+
+        return "normal/settings";
     }
 }

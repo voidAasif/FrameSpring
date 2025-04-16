@@ -105,6 +105,31 @@ public class HomeController {
         return "login";
     }
 
+    @GetMapping("/forgot-password")
+    public String forgotPassword(Model model){
+        model.addAttribute("title", "Forgot-Password");
+
+        return "forgotPassword";
+    }
+
+    @PostMapping("/process-forgot-password")
+    public String processForgotPassword(@ModelAttribute("email") String email){
+        System.out.println("forgot mail: "+email); //log;
+
+        //check credentials and send OTP to given mail;
+
+        return "otp";
+    }
+
+    @PostMapping("/process-otp")
+    public String processOtp(@ModelAttribute("otp") String otp){
+        System.out.println("forgot otp: "+otp); //log;
+
+        //match input OTP with generated otp;
+
+        return "login";
+    }
+
 }
 
 

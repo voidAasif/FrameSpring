@@ -46,7 +46,7 @@ public class MyConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth //config for authentication;
-                        .requestMatchers("/", "/about", "/home", "/signup", "/login", "/css/**", "/js/**", "/img/**", "/do_register")
+                        .requestMatchers("/", "/about", "/home", "/signup", "/login", "/forgot-password", "/process-forgot-password", "/process-otp", "/css/**", "/js/**", "/img/**", "/do_register")
                         .permitAll() //all requestMatchers permit;
                         .requestMatchers("/admin/**").hasRole("ADMIN_ROLE") // Only ADMIN can access /admin/**
                         .requestMatchers("/normal/**").hasRole("USER_ROLE") // Only USER can access /user/**
