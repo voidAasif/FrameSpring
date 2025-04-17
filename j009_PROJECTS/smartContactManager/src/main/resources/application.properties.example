@@ -42,19 +42,3 @@ spring.mail.properties.mail.smtp.auth=true
 # Enable STARTTLS encryption
 spring.mail.properties.mail.smtp.starttls.enable=true
 
-# -------------------------------------
-# Optional Settings for Debugging and Performance
-# -------------------------------------
-# Default encoding for emails
-spring.mail.default-encoding=UTF-8
-# Check if mail server connection is possible at startup
-spring.mail.test-connection=true
-# Connection timeout in milliseconds
-spring.mail.properties.mail.smtp.connectiontimeout=5000
-# Read timeout in milliseconds
-spring.mail.properties.mail.smtp.timeout=5000
-# Write timeout in milliseconds
-spring.mail.properties.mail.smtp.writetimeout=5000
-# Enable debug logging for mail sending process (helpful during development)
-spring.mail.properties.mail.debug=true
-
