@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.smartContactManager.dao.UserRepository;
 import com.example.smartContactManager.entities.Mail;
-import com.example.smartContactManager.entities.Otp;
 import com.example.smartContactManager.entities.User;
 import com.example.smartContactManager.helper.Message;
 import com.example.smartContactManager.helper.OtpHelper;
