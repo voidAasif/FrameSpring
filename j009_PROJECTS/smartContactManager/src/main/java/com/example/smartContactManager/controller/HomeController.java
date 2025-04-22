@@ -54,9 +54,7 @@ public class HomeController {
         return "signup";
     }
 
-    // this handler for registering user;
-
-    @PostMapping("/do_register") // execute when submit button clicked;
+    @PostMapping("/do_register") // used to register user;
     public String registerUser(@Valid @ModelAttribute("user") User user, BindingResult bindingResult,
             @RequestParam(value = "agreement", defaultValue = "false") boolean agreement, Model model,
             HttpSession httpSession) {
@@ -73,44 +71,73 @@ public class HomeController {
         }
 
         try {
-            user.setEnabled(true); // set empty values of user;
-            user.setRole("USER_ROLE");
-            user.setImage("default.png");
-
-            System.out.println(model); // logs;
-            System.out.println(agreement);
-            System.out.println();
-
-            if (!agreement) { // if user not check the checkbox;
-                System.out.println("Please accept the terms and conditions first");
-                throw new Exception("Please accept the terms and conditions first"); // throw exception and jump to
-                                                                                     // catch block;
+            if (!agreement) {
+                throw new Exception("Please accept the terms and conditions first");
             }
-
-            // encode password;
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-
-            // temporary block the DB for validation testing;
-            User savedUser = userRepository.save(user); // save user into DB;
-            System.out.println("saved user: " + savedUser); // log;
-
-            // now we can access it in HTML by (${session.className.attribute}), we take
-            // content to store message and type to append class name in css;
-            httpSession.setAttribute("message", new Message("Data submit successfully", "alert-success"));
-
-            model.addAttribute("user", new User()); // if all data is correct then empty tha form;
-
+    
+            // Generate OTP
+            String otp = otpHelper.generateOTP();
+    
+            // Create and send mail
+            Mail mail = new Mail();
+            mail.setMailTo(user.getEmail());
+            mail.setMailSubject("Aasif - Smart Contact Manager Signup OTP");
+            mail.setMailContent("Your OTP for registration is: " + otp);
+    
+            sendMailHelper.sendMail(mail);
+    
+            // Store user and OTP in session (temporarily)
+            httpSession.setAttribute("otpUser", user); // Not saved to DB yet
+            httpSession.setAttribute("signupOtp", otp);
+            httpSession.setAttribute("signupOtpExpire", System.currentTimeMillis() + 5 * 60 * 1000); // 5 min expiry
+    
+            return "verifySignupOtp"; // Show OTP input form
+    
         } catch (Exception e) {
             e.printStackTrace();
-
-            // e.getMessage append the exception message;
-            httpSession.setAttribute("message",
-                    new Message("Something went wrong !!" + e.getMessage(), "alert-danger"));
-            // if exception occurs then display old user data into form;
             model.addAttribute("user", user);
+            httpSession.setAttribute("message", new Message("Something went wrong: " + e.getMessage(), "alert-danger"));
+            return "signup";
+        }
+    }
+
+    @PostMapping("/process-signup-otp") //process signup form OTP;
+    public String processSignupOtp(@RequestParam("otp") String enteredOtp, HttpSession httpSession, Model model) {
+
+        String storedOtp = (String) httpSession.getAttribute("signupOtp");
+        Long expiry = (Long) httpSession.getAttribute("signupOtpExpire");
+        User user = (User) httpSession.getAttribute("otpUser");
+
+        if (storedOtp == null || user == null || expiry == null) {
+            httpSession.setAttribute("message", new Message("Session expired or invalid flow. Please sign up again.", "alert-danger"));
+            return "signup";
         }
 
-        return "login"; // success- change view; currently not changed;
+        if (System.currentTimeMillis() > expiry) {
+            httpSession.setAttribute("message", new Message("OTP expired. Please sign up again.", "alert-danger"));
+            httpSession.invalidate();
+            return "signup";
+        }
+
+        if (!storedOtp.equals(enteredOtp)) {
+            httpSession.setAttribute("message", new Message("Invalid OTP. Please try again.", "alert-danger"));
+            return "verifySignupOtp";
+        }
+
+        // OTP valid — Save user
+        user.setEnabled(true);
+        user.setRole("USER_ROLE");
+        user.setImage("default.png");
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        userRepository.save(user);
+
+        httpSession.removeAttribute("signupOtp");
+        httpSession.removeAttribute("otpUser");
+        httpSession.removeAttribute("signupOtpExpire");
+
+        httpSession.setAttribute("message", new Message("Registered successfully!", "alert-success"));
+        return "login";
     }
 
     @GetMapping("/login") // display login page;
@@ -119,18 +146,23 @@ public class HomeController {
         return "login";
     }
 
-    @GetMapping("/forgot-password")
+    @GetMapping("/forgot-password") // display forgot password page;
     public String forgotPassword(Model model) {
         model.addAttribute("title", "Forgot-Password");
 
         return "forgotPassword";
     }
 
-    @PostMapping("/process-forgot-password")
+    @PostMapping("/process-forgot-password") //send OTP to the given mail to forgot password;
     public String processForgotPassword(@ModelAttribute("email") String email, HttpSession httpSession) {
         System.out.println("forgot mail: " + email); // log;
 
-        // check credentials and send OTP to given mail;
+        // check credentials;
+        if (userRepository.getUserByUserName(email) == null) {
+            return "forgotPassword";
+        }
+
+        //create OTP Mail;
         Mail mail = new Mail();
 
         mail.setMailTo(email);
@@ -143,9 +175,9 @@ public class HomeController {
         // Store the OTP and the associated email in the session (for temporary storage)
         httpSession.setAttribute("otp", generatedOtp);
         httpSession.setAttribute("otpEmail", email);
-        httpSession.setAttribute("otpExpireTime", System.currentTimeMillis() + (5 * 60 * 1000)); // Set OTP expiry
-                                                                                                 // (e.g., 5 minutes)
+        httpSession.setAttribute("otpExpireTime", System.currentTimeMillis() + (5 * 60 * 1000)); // Set OTP expiry (e.g., 5 minutes)
 
+        //send OTP;
         try {
             sendMailHelper.sendMail(mail);
             System.out.println("Mail sended successfully"); // log;
@@ -158,7 +190,7 @@ public class HomeController {
         return "forgotPassword";
     }
 
-    @PostMapping("/process-otp")
+    @PostMapping("/process-otp") //process forgot password OTP;
     public String processOtp(@RequestParam("otp") String userEnteredOtp, HttpSession session, Model model) {
         System.out.println("Entered OTP: " + userEnteredOtp); //log;
 
@@ -205,9 +237,15 @@ public class HomeController {
         }
     }
 
-    @PostMapping("/process-reset-password")
+    @PostMapping("/process-reset-password") //after verification update password;
     public String processResetPassword(Model model, @ModelAttribute("newPassword") String newPassword, @ModelAttribute("email") String email){
         model.addAttribute("title", "Reset Password");
+
+        System.out.println("update password:  "); //log;
+        System.out.println(email);
+        System.out.println(newPassword);
+        System.out.println(userRepository.getUserByUserName(email));
+
 
         try {     
             User user = userRepository.getUserByUserName(email);
